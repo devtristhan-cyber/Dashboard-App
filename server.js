@@ -34,6 +34,28 @@ if (db.prepare('SELECT COUNT(*) AS n FROM products').get().n === 0) {
 }
 
 // ---------- Middleware ----------
+// Allow your GitHub Pages frontend to access this API
+const allowedOrigin = 'https://devtristhan-cyber.github.io';
+
+app.use((req, res, next) => {
+  if (req.headers.origin === allowedOrigin) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  }
+
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
+  );
+
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -113,6 +135,6 @@ app.delete('/api/products/:id', (req, res) => {
   res.json({ success: true });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Dashboard running at http://localhost:${PORT}`);
 });
