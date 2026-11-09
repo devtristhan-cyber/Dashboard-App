@@ -1,12 +1,12 @@
 const express = require('express');
-const Database = require('better-sqlite3');
+const { DatabaseSync } = require('node:sqlite');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ---------- Database (SQLite file is created automatically) ----------
-const db = new Database(path.join(__dirname, 'inventory.db'));
+const db = new DatabaseSync(path.join(__dirname, 'inventory.db'));
 db.exec(`
   CREATE TABLE IF NOT EXISTS products (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
